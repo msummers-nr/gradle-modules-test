@@ -1,0 +1,18 @@
+#
+# This is the release build workflow that must be present in every repository
+#
+name: Build
+
+on:
+  push:
+    branches: [ main ]
+
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Invoke the main build
+        uses: msummers-nr/build-main-action@v1

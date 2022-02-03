@@ -1,0 +1,1 @@
+mvn install:install-file -Dfile=./newrelic-lambda-tracer/build/libs/newrelic-lambda-tracer-all.jar -DgroupId=com.newrelic -DartifactId=newrelic-lambda-tracer -Dversion=0.0.1 -Dpackaging=jar

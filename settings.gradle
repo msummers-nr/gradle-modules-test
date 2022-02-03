@@ -1,0 +1,3 @@
+rootProject.name = 'newrelic-java-lambda'
+
+include 'newrelic-lambda-tracer'

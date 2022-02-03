@@ -1,0 +1,48 @@
+plugins {
+    id 'com.github.johnrengelman.shadow' version '4.0.4'
+    id "me.champeau.gradle.jmh" version "0.4.8"
+}
+
+dependencies {
+    compile('io.opentracing:opentracing-api:0.31.0') { transitive = false }
+    compile('io.opentracing:opentracing-util:0.31.0') { transitive = false }
+    compile('io.opentracing:opentracing-noop:0.31.0') { transitive = false }
+    compile('com.googlecode.json-simple:json-simple:1.1') { transitive = false }
+
+    testCompile 'junit:junit:4.12'
+
+    jmh 'io.opentracing:opentracing-mock:0.31.0'
+}
+
+jar {
+    manifest {
+        attributes 'Implementation-Title': 'New Relic OpenTracing Lambda Tracer', 'Implementation-Version': '1.0.0'
+    }
+}
+
+apply plugin: 'com.github.johnrengelman.shadow'
+
+shadowJar {
+    configurations = [project.configurations.compile]
+    relocate 'org.json.simple', 'newrelic.lambda.org.json.simple'
+}
+
+apply plugin: "me.champeau.gradle.jmh"
+
+jmh {
+    jmhVersion = '1.21'
+    jvmArgs = ['-server']
+    fork = 1
+    iterations = 1
+    warmupIterations = 1
+    resultsFile = project.file("${project.buildDir}/reports/jmh/results.txt")
+    humanOutputFile = project.file("${project.buildDir}/reports/jmh/human.txt")
+}
+
+test {
+    environment "NEW_RELIC_ACCOUNT_ID", "account"
+    environment "NEW_RELIC_TRUST_KEY", "trustKey"
+    environment "NEW_RELIC_PRIMARY_APPLICATION_ID", "primaryApp"
+}
+
+tasks.jmh.dependsOn shadowJar

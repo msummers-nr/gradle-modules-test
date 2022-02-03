@@ -1,0 +1,22 @@
+plugins {
+    id 'java'
+}
+
+jar {
+    manifest {
+        attributes(
+                'Implementation-Title': "New Relic Lambda Agent",
+                'Implementation-Version': rootProject.version)
+    }
+}
+
+allprojects {
+    apply plugin: 'java'
+
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+
+    repositories {
+        mavenCentral()
+    }
+}
